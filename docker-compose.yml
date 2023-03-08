@@ -1,0 +1,51 @@
+version: "3.2"
+services:
+  
+  appbackend:
+    build:
+      context: .
+    container_name: backend
+    volumes:
+      - ./:/usr/src/app
+      - ./node_modules:/usr/src/app/node_modules
+    ports:
+      - 3000:3000
+    environment:
+      - HOST=172.10.0.11
+      - PORT=3306
+      - USER=root
+      - PASSWORD=280510
+      - DATABASE=silviopd
+    depends_on:
+      - mysql
+    command: npm run dev
+    networks:
+      redTest:
+        ipv4_address: 172.10.0.10
+
+
+  mysql:
+    image: mariadb
+    container_name: mysql
+    command: mysqld --default-authentication-plugin=mysql_native_password
+    restart: always
+    volumes:
+      - $PWD/mysql/:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=280510
+      - MYSQL_ROOT_HOST=%
+      - MYSQL_DATABASE=silviopd
+    ports:
+      - "3306:3306"
+    networks:
+      redTest:
+        ipv4_address: 172.10.0.11
+
+networks:
+  redTest:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.10.0.0/24
+
