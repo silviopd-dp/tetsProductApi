@@ -149,3 +149,4 @@ mysql/
 package-lock.json
 public/
 postgresql/
+gitlab-runner/
