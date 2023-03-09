@@ -1,13 +1,23 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
-const mysql = require('mysql');
+//const mysql = require('mysql');
+const { Pool } = require('pg');
 
 const app = express();
 app.use(bodyParser.json());
 
 // Configurar la conexión con la base de datos MySQL
-const connection = mysql.createConnection({
+// const connection = mysql.createConnection({
+//   host: process.env.HOST,
+//   user: process.env.USER,
+//   port: process.env.PORT,
+//   password: process.env.PASSWORD,
+//   database: process.env.DATABASE
+// });
+
+// Configurar la conexión con la base de datos PostgreSQL
+const pool = new Pool({
   host: process.env.HOST,
   user: process.env.USER,
   port: process.env.PORT,
@@ -26,7 +36,8 @@ app.post('/login', (req, res) => {
   console.log(req.body)
 
   // Consultar la base de datos para verificar el usuario y la contraseña
-  connection.query('SELECT * FROM users WHERE username = ? AND password = ?', [username, password], (error, results) => {
+  //cambiar la variable connection (mysql) - pool (postgresql) y ? (mysql) - $1 (postgresql)
+  pool.query('SELECT * FROM users WHERE username = $1 AND password = $2', [username, password], (error, results) => {
     if (error) {
       res.status(500).json({ error: 'Error al consultar la base de datos' });
     } else if (results.length == 0) {
@@ -74,11 +85,30 @@ function authenticateToken(req, res, next) {
 
 // Endpoint para obtener los productos (requiere autenticación con token)
 app.get('/productos', authenticateToken, (req, res) => {
-  connection.query('SELECT * FROM products', (error, results) => {
+  pool.query('SELECT * FROM products', (error, results) => {
     if (error) {
       res.status(500).json({ error: 'Error al consultar la base de datos' });
     } else {
       res.json(results);
+    }
+  });
+});
+
+// Endpoint para ingresar un nuevo producto (requiere autenticación con token)
+app.post('/productos', authenticateToken, (req, res) => {
+  const { nombre, precio } = req.body;
+
+  if (!nombre || !precio) {
+    res.status(400).json({ error: 'Nombre y precio son campos requeridos' });
+    return;
+  }
+
+  pool.query('INSERT INTO products(name, price) VALUES($1, $2) RETURNING id', [nombre, precio], (error, results) => {
+    if (error) {
+      res.status(500).json({ error: 'Error al ingresar el producto' });
+    } else {
+      const newProductId = results.rows[0].id;
+      res.status(201).json({ id: newProductId, nombre, precio });
     }
   });
 });

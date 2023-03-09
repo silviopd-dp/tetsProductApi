@@ -147,3 +147,5 @@ dist
 #silviopd
 mysql/
 package-lock.json
+public/
+postgresql/
