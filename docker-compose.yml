@@ -12,16 +12,16 @@ services:
     ports:
       - 3000:3000
     environment:
-      - HOST=172.10.0.10
-      - PORT=5432
-      - USER=postgres
-      - PASSWORD=280510
-      - DATABASE=silviopd
-      # - HOST=dpg-cg4tkt02qv287cr8ahog-a.oregon-postgres.render.com
+      # - HOST=172.10.0.10
       # - PORT=5432
-      # - USER=dbtestapi_user
-      # - PASSWORD=nSVjtqIX38nDjyLwELnu5kBYVoT6GeLo
-      # - DATABASE=dbtestapi
+      # - USER=postgres
+      # - PASSWORD=280510
+      # - DATABASE=silviopd
+      - HOST=containers-us-west-66.railway.app
+      - PORT=5838
+      - USER=postgres
+      - PASSWORD=RNg3Fu39kbK4lJPvqCCE
+      - DATABASE=railway
     depends_on:
       - postgres
     command: npm run dev
