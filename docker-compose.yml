@@ -12,11 +12,16 @@ services:
     ports:
       - 3000:3000
     environment:
-      - HOST=172.10.0.10
+      # - HOST=172.10.0.10
+      # - PORT=5432
+      # - USER=postgres
+      # - PASSWORD=280510
+      # - DATABASE=silviopd
+      - HOST=dpg-cg4tkt02qv287cr8ahog-a.oregon-postgres.render.com
       - PORT=5432
-      - USER=postgres
-      - PASSWORD=280510
-      - DATABASE=silviopd
+      - USER=dbtestapi_user
+      - PASSWORD=nSVjtqIX38nDjyLwELnu5kBYVoT6GeLo
+      - DATABASE=dbtestapi
     depends_on:
       - postgres
     command: npm run dev
@@ -44,6 +49,7 @@ services:
 
   phpmyadmin:
     image: phpmyadmin
+    container_name: phpmyadmin
     ports:
       - 8080:80
     environment:
