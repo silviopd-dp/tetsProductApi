@@ -17,12 +17,18 @@ app.use(bodyParser.json());
 // });
 
 // Configurar la conexión con la base de datos PostgreSQL
+
 const pool = new Pool({
-  host: process.env.HOST,
-  user: process.env.USER,
-  port: process.env.PORT,
-  password: process.env.PASSWORD,
-  database: process.env.DATABASE
+  host: dpg-cg4tkt02qv287cr8ahog-a.oregon-postgres.render.com,
+  user: dbtestapi_user,
+  port: 5432,
+  password: nSVjtqIX38nDjyLwELnu5kBYVoT6GeLo,
+  database: dbtestapi
+  // host: process.env.HOST,
+  // user: process.env.USER,
+  // port: process.env.PORT,
+  // password: process.env.PASSWORD,
+  // database: process.env.DATABASE
 });
 
 // Variable global para almacenar el token activo

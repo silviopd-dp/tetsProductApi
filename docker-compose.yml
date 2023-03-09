@@ -4,6 +4,7 @@ services:
   appbackend:
     build:
       context: .
+      dockerfile: Dockerfile-node
     container_name: backend
     volumes:
       - ./:/usr/src/app
@@ -84,7 +85,21 @@ services:
       redTest:
         ipv4_address: 172.10.0.11
 
-
+  # gitlabrunner: 
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile-Gitlab-runner
+  #   container_name: gitlabrunner
+  #   volumes:
+  #     - ./gitlab-runner:/etc/gitlab-runner
+  #     - /var/run/docker.sock:/var/run/docker.sock
+  #   # ports:
+  #   #   - 3000:3000
+  #   depends_on:
+  #     - appbackend
+  #   networks:
+  #     redTest:
+  #       ipv4_address: 172.10.0.15
 
 networks:
   redTest:
